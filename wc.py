@@ -1,7 +1,6 @@
-import os.path
-import sys
-import argparse
+import os, sys
 import logging
+import argparse
 
 class wc:
 	def __init__(self, args):
