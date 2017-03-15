@@ -77,52 +77,52 @@ class wc:
 			if self.args.lines:
 				if self.args.words:
 					if self.args.chars:
-						logging.info("%"+nDigits+"d %"+nDigits+"d %"+nDigits+"d %s", self.lineCount[filePointer.name], self.wordCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
+						logging.info("%" + nDigits + "d %" + nDigits + "d %" + nDigits + "d %s", self.lineCount[filePointer.name], self.wordCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
 					else:
-						logging.info("%"+nDigits+"d %"+nDigits+"d %s", self.lineCount[filePointer.name], self.wordCount[filePointer.name], filePointer.name)
+						logging.info("%" + nDigits + "d %" + nDigits + "d %s", self.lineCount[filePointer.name], self.wordCount[filePointer.name], filePointer.name)
 				else:
 					if self.args.chars:
-						logging.info("%"+nDigits+"d %"+nDigits+"d %s", self.lineCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
+						logging.info("%" + nDigits + "d %" + nDigits + "d %s", self.lineCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
 					else:
-						logging.info("%"+nDigits+"d %s", self.lineCount[filePointer.name], filePointer.name)
+						logging.info("%" + nDigits + "d %s", self.lineCount[filePointer.name], filePointer.name)
 			else:
 				if self.args.words:
 					if self.args.chars:
-						logging.info("%"+nDigits+"d %"+nDigits+"d %s", self.wordCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
+						logging.info("%" + nDigits + "d %" + nDigits + "d %s", self.wordCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
 					else:
-						logging.info("%"+nDigits+"d %s", self.wordCount[filePointer.name], filePointer.name)
+						logging.info("%" + nDigits + "d %s", self.wordCount[filePointer.name], filePointer.name)
 				else:
 					if self.args.chars:
-						logging.info("%"+nDigits+"d %s", self.charCount[filePointer.name], filePointer.name)
+						logging.info("%" + nDigits + "d %s", self.charCount[filePointer.name], filePointer.name)
 
 		if self.args.lines:
 			if self.args.words:
 				if self.args.chars:
-					logging.info("%"+nDigits+"d %"+nDigits+"d %"+nDigits+"d total", self.totalLineCount, self.totalWordCount, self.totalCharCount)
+					logging.info("%" + nDigits + "d %" + nDigits + "d %" + nDigits + "d total", self.totalLineCount, self.totalWordCount, self.totalCharCount)
 				else:
-					logging.info("%"+nDigits+"d %"+nDigits+"d total", self.totalLineCount, self.totalWordCount)
+					logging.info("%" + nDigits + "d %" + nDigits + "d total", self.totalLineCount, self.totalWordCount)
 			else:
 				if self.args.chars:
-					logging.info("%"+nDigits+"d %"+nDigits+"d total", self.totalLineCount, self.totalCharCount)
+					logging.info("%" + nDigits + "d %" + nDigits + "d total", self.totalLineCount, self.totalCharCount)
 				else:
-					logging.info("%"+nDigits+"d total", self.totalLineCount)
+					logging.info("%" + nDigits + "d total", self.totalLineCount)
 		else:
 			if self.args.words:
 				if self.args.chars:
-					logging.info("%"+nDigits+"d %"+nDigits+"d total", self.totalWordCount, self.totalCharCount)
+					logging.info("%" + nDigits + "d %" + nDigits + "d total", self.totalWordCount, self.totalCharCount)
 				else:
-					logging.info("%"+nDigits+"d total", self.totalWordCount)
+					logging.info("%" + nDigits + "d total", self.totalWordCount)
 			else:
 				if self.args.chars:
-					logging.info("%"+nDigits+"d total", self.totalCharCount)
+					logging.info("%" + nDigits + "d total", self.totalCharCount)
 
 
 def main():
 	parser = argparse.ArgumentParser()
-	parser.add_argument("input", nargs = "+", help="name of input file")
-	parser.add_argument("-c", "--chars", help="count characters (bytes)", action = "store_true")
-	parser.add_argument("-l", "--lines", help="count lines", action = "store_true")
-	parser.add_argument("-w", "--words", help="count words", action = "store_true")
+	parser.add_argument("input", nargs = "+", help = "name of input file")
+	parser.add_argument("-c", "--chars", help = "count characters (bytes)", action = "store_true")
+	parser.add_argument("-l", "--lines", help = "count lines", action = "store_true")
+	parser.add_argument("-w", "--words", help = "count words", action = "store_true")
 	args = parser.parse_args()
 
 	wcInstance = wc(args)
