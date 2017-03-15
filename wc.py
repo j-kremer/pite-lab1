@@ -9,24 +9,28 @@ class wc:
 		self.wordCount = {}
 		self.charCount = {}
 
-		self.args = args
+		logFileName = "wc.log"
+		if os.path.isfile(logFileName):
+			os.remove(logFileName)
+		logging.basicConfig(filename = logFileName, level = logging.INFO)
 
+		self.args = args
 		self.files = []
 		for fileName in self.args.input:
 			if os.path.isfile(fileName):
-				print "Input file:", fileName, "valid"
+				logging.info("Input file: %s valid\n", fileName)
 				f = open(fileName, 'r')
 				self.files.append(f)
 			else:
-				print "Non-existing file provided as input, exiting now!"
+				logging.info("Non-existing file: %s provided as input, exiting now!", fileName)
 				sys.exit(0)
-		print "\n"
 
 	def countLines(self):
 		for filePointer in self.files:
 			filePointer.seek(0)
 			self.lineCount[filePointer.name] = 0
 			self.countLinesPerFile(filePointer)
+		self.totalLineCount = sum(self.lineCount.values())
 
 	def countLinesPerFile(self, filePointer):
 		for line in filePointer:
@@ -38,6 +42,7 @@ class wc:
 			filePointer.seek(0)
 			self.wordCount[filePointer.name] = 0
 			self.countWordsPerFile(filePointer)
+		self.totalWordCount = sum(self.wordCount.values())
 
 	def countWordsPerFile(self, filePointer):
 		for line in filePointer:
@@ -50,11 +55,68 @@ class wc:
 			filePointer.seek(0)
 			self.charCount[filePointer.name] = 0
 			self.countCharsPerFile(filePointer)
+		self.totalCharCount = sum(self.charCount.values())
 
 	def countCharsPerFile(self, filePointer):
 		for line in filePointer:
 			self.charCount[filePointer.name] += len(line)
 		return self.charCount[filePointer.name]
+
+
+	def printLogFile(self):
+		if self.args.chars:
+			nDigits = str(len(str(self.totalCharCount)))
+		elif self.args.words:
+			nDigits = str(len(str(self.totalWordCount)))
+		elif self.args.lines:
+			nDigits = str(len(str(self.totalLineCount)))
+		else:
+			nDigits = 0
+			return
+
+		for filePointer in self.files:
+			if self.args.lines:
+				if self.args.words:
+					if self.args.chars:
+						logging.info("%"+nDigits+"d %"+nDigits+"d %"+nDigits+"d %s", self.lineCount[filePointer.name], self.wordCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
+					else:
+						logging.info("%"+nDigits+"d %"+nDigits+"d %s", self.lineCount[filePointer.name], self.wordCount[filePointer.name], filePointer.name)
+				else:
+					if self.args.chars:
+						logging.info("%"+nDigits+"d %"+nDigits+"d %s", self.lineCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
+					else:
+						logging.info("%"+nDigits+"d %s", self.lineCount[filePointer.name], filePointer.name)
+			else:
+				if self.args.words:
+					if self.args.chars:
+						logging.info("%"+nDigits+"d %"+nDigits+"d %s", self.wordCount[filePointer.name], self.charCount[filePointer.name], filePointer.name)
+					else:
+						logging.info("%"+nDigits+"d %s", self.wordCount[filePointer.name], filePointer.name)
+				else:
+					if self.args.chars:
+						logging.info("%"+nDigits+"d %s", self.charCount[filePointer.name], filePointer.name)
+
+		if self.args.lines:
+			if self.args.words:
+				if self.args.chars:
+					logging.info("%"+nDigits+"d %"+nDigits+"d %"+nDigits+"d total", self.totalLineCount, self.totalWordCount, self.totalCharCount)
+				else:
+					logging.info("%"+nDigits+"d %"+nDigits+"d total", self.totalLineCount, self.totalWordCount)
+			else:
+				if self.args.chars:
+					logging.info("%"+nDigits+"d %"+nDigits+"d total", self.totalLineCount, self.totalCharCount)
+				else:
+					logging.info("%"+nDigits+"d total", self.totalLineCount)
+		else:
+			if self.args.words:
+				if self.args.chars:
+					logging.info("%"+nDigits+"d %"+nDigits+"d total", self.totalWordCount, self.totalCharCount)
+				else:
+					logging.info("%"+nDigits+"d total", self.totalWordCount)
+			else:
+				if self.args.chars:
+					logging.info("%"+nDigits+"d total", self.totalCharCount)
+
 
 def main():
 	parser = argparse.ArgumentParser()
@@ -73,24 +135,8 @@ def main():
 	if args.chars:
 		wcInstance.countChars()
 
-	for fileName in args.input:
-		output = ""
-		if args.lines:
-			output += "\t"+str(wcInstance.lineCount[fileName])
-		if args.words:
-			output += "\t"+str(wcInstance.wordCount[fileName])
-		if args.chars:
-			output += "\t"+str(wcInstance.charCount[fileName])
-		print output+"\t"+fileName
+	wcInstance.printLogFile()
 
-	output = ""
-	if args.lines:
-		output += "\t"+str(sum(wcInstance.lineCount.values()))
-	if args.words:
-		output += "\t"+str(sum(wcInstance.wordCount.values()))
-	if args.chars:
-		output += "\t"+str(sum(wcInstance.charCount.values()))
-	print output+"\ttotal"
 
 if __name__ == '__main__':
 	main()
